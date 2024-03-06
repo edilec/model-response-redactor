@@ -1,0 +1,17 @@
+{
+  "name": "model-response-redactor",
+  "version": "0.0.0",
+  "description": "Remove secrets and personal data from model inputs and outputs in saved traces.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edilec/model-response-redactor"
+  }
+}
