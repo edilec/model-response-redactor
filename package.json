@@ -3,11 +3,17 @@
   "version": "0.0.0",
   "description": "Remove secrets and personal data from model inputs and outputs in saved traces.",
   "type": "module",
+  "bin": {
+    "model-response-redactor": "./bin/model-response-redactor.mjs"
+  },
+  "exports": "./src/index.mjs",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test"
+    "lint": "node --check src/index.mjs && node --check src/json.mjs && node --check src/write-guard.mjs && node --check bin/model-response-redactor.mjs",
+    "test": "node --test",
+    "check": "npm run lint && npm test"
   },
   "license": "MIT",
   "repository": {
