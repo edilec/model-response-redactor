@@ -40,6 +40,15 @@ test('invalid policy has empty stdout; unreadable trace has incomplete report', 
   assert.equal(missing.status, 2); assert.equal(JSON.parse(missing.stdout).status, 'incomplete');
 }));
 
+test('unsupported local policy option exits two with empty stdout, never a clean unredacted trace', () => withDir(dir => {
+  const { input, config } = fixtures(dir);
+  writeFileSync(input, JSON.stringify({ schemaVersion: 1, messages: [{ role: 'user', content: 'synthetic_secret_123' }] }));
+  writeFileSync(config, JSON.stringify({ schemaVersion: 1, rules: [{ id: 'canary', type: 'literal', value: 'SYNTHETIC_SECRET_123', caseInsensitive: true }] }));
+  const result = run('--trace', input, '--policy', config);
+  assert.equal(result.status, 2);
+  assert.equal(result.stdout, '');
+}));
+
 test('destination symlink, hardlink to either read input, and existing file are refused without rewriting', () => withDir(dir => {
   const { input, config } = fixtures(dir); const out = join(dir, 'out.json');
   for (const target of [input, config]) {

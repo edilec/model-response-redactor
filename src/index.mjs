@@ -1,16 +1,17 @@
 export const TOOL_ID = 'model-response-redactor';
 
 const object = x => x !== null && typeof x === 'object' && !Array.isArray(x);
+const keysAre = (value, allowed) => Object.keys(value).every(key => allowed.includes(key));
 const order = (a, b) => a === b ? 0 : a < b ? -1 : 1;
 const clean = x => typeof x === 'string' && !/[\x00-\x1f\x7f-\x9f\u202a-\u202e\u2066-\u2069]/u.test(x);
 const roles = new Set(['system', 'developer', 'user', 'assistant', 'tool']);
 const EMAIL = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/giu;
 
 function validatePolicy(policy) {
-  if (!object(policy) || policy.schemaVersion !== 1 || !Array.isArray(policy.rules) || policy.rules.length < 1 || policy.rules.length > 32) throw new TypeError('invalid policy');
+  if (!object(policy) || !keysAre(policy, ['schemaVersion', 'rules']) || policy.schemaVersion !== 1 || !Array.isArray(policy.rules) || policy.rules.length < 1 || policy.rules.length > 32) throw new TypeError('invalid policy');
   const ids = new Set();
   for (const rule of policy.rules) {
-    if (!object(rule) || !/^[a-z][a-z0-9-]{0,31}$/u.test(rule.id ?? '') || ids.has(rule.id) || !['literal', 'email'].includes(rule.type)) throw new TypeError('invalid policy rule');
+    if (!object(rule) || !keysAre(rule, rule.type === 'literal' ? ['id', 'type', 'value'] : ['id', 'type']) || !/^[a-z][a-z0-9-]{0,31}$/u.test(rule.id ?? '') || ids.has(rule.id) || !['literal', 'email'].includes(rule.type)) throw new TypeError('invalid policy rule');
     if (rule.type === 'literal' && (!clean(rule.value) || rule.value.length < 2 || rule.value.length > 256)) throw new TypeError('invalid policy literal');
     if (rule.type === 'literal' && [...roles].some(role => role.includes(rule.value))) throw new TypeError('policy matches structural role');
     if (rule.type === 'literal' && ('[REDACTED]'.includes(rule.value) || rule.id.includes(rule.value))) throw new TypeError('policy literal appears in report metadata');

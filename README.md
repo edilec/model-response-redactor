@@ -22,6 +22,8 @@ Trace: UTF-8 JSON `{ "schemaVersion": 1, "messages": [{ "role": "user", "content
 
 Policy: UTF-8 JSON `{ "schemaVersion": 1, "rules": [{ "id": "token", "type": "literal", "value": "SYNTHETIC_SECRET_123" }, { "id": "email", "type": "email" }] }`. `literal` is an exact case-sensitive substring; `email` is a conservative ASCII address pattern. No arbitrary regular expressions or implicit detectors are accepted. The fixed replacement is `[REDACTED]`. When matches overlap, the longest span at the earliest position wins; counts identify only the chosen rules. Caller-supplied IDs must be non-sensitive. This tool only attests that the configured detectors ran; no detector can establish that *all* sensitive data is absent.
 
+Unknown policy fields are invalid configuration. In particular, options such as `caseInsensitive` are not supported and are rejected rather than silently ignored.
+
 ## Rules
 
 | Rule | Meaning |

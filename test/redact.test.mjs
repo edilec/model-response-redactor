@@ -62,6 +62,14 @@ test('policy must be explicit, safe and bounded', () => {
   }
 });
 
+test('unsupported policy keys are rejected instead of silently weakening redaction', () => {
+  const lower = { schemaVersion: 1, messages: [{ role: 'user', content: 'synthetic_secret_123' }] };
+  const base = policy();
+  assert.throws(() => redactTrace(lower, { ...base, caseInsensitive: true }), /policy/i);
+  assert.throws(() => redactTrace(lower, { ...base, rules: [{ ...base.rules[0], caseInsensitive: true }] }), /policy/i);
+  assert.throws(() => redactTrace(lower, { schemaVersion: 1, rules: [{ id: 'email', type: 'email', domainOnly: true }] }), /policy/i);
+});
+
 test('string bound permits exactly N and refuses N+1 without output', () => {
   const trace = { schemaVersion: 1, messages: [{ role: 'user', content: 'hello' }] };
   assert.equal(redactTrace(trace, policy(), { maxString: 5 }).status, 'pass');
