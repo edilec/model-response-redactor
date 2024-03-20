@@ -1,6 +1,6 @@
 {
   "name": "model-response-redactor",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Remove secrets and personal data from model inputs and outputs in saved traces.",
   "type": "module",
   "bin": {
