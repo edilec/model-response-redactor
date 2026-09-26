@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "rules": [
+    { "id": "synthetic-token", "type": "literal", "value": "SYNTHETIC_SECRET_123" },
+    { "id": "email", "type": "email" }
+  ]
+}

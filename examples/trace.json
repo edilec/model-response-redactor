@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "messages": [
+    { "role": "user", "content": "Explain this synthetic example." },
+    { "role": "tool", "content": { "result": "Synthetic token: SYNTHETIC_SECRET_123; contact canary@example.invalid", "error": null } },
+    { "role": "assistant", "content": "I found a synthetic token in the tool output." }
+  ]
+}

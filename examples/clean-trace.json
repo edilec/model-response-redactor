@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "messages": [
+    { "role": "user", "content": "Hello, this is a synthetic example." },
+    { "role": "assistant", "content": "Hello back." }
+  ]
+}
